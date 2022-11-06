@@ -1,0 +1,69 @@
+---
+title: "Plotly Presentation"
+author: "Danny Beery"
+date: "2022-11-06"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# What's gets better mpg: automatic or manual transmission?
+
+## Exploratory analysis
+
+```{r, message = FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(ggpubr)
+a <- mtcars %>%
+  filter(am == 0) %>%
+  ggplot(aes(mpg)) +
+  geom_histogram() +
+  labs(title = "Automatic"
+  ) +
+  ylab("Frequency") +
+  xlab("Miles per gallon")
+b <- mtcars %>%
+  filter(am == 1) %>%
+  ggplot(aes(mpg)) +
+  geom_histogram() +
+  labs(title = "Manual"
+  ) +
+  ylab("Frequency") +
+  xlab("Miles per gallon")
+ggarrange(a,b, nrow = 1, ncol = 2)
+```
+
+## Simple Linear regression
+
+```{r, echo = TRUE}
+y <- lm(mpg ~ am, data = mtcars)
+y$coefficients
+```
+
+## Model Selection
+
+```{r, include = FALSE, echo = TRUE}
+y2 <- lm(mpg ~ ., data = mtcars)
+stepy2 <- step(y2)
+```
+
+```{r, echo = TRUE, eval = FALSE}
+y2 <- lm(mpg ~ ., data = mtcars)
+stepy2 <- step(y2)
+```
+
+```{r, echo = TRUE, eval = TRUE}
+stepy2$call
+```
+
+## Multivariate Regression
+
+
+```{r, echo = TRUE, eval = TRUE}
+y3 <- lm(mpg ~ wt + qsec + am, data = mtcars)
+y3$coefficients
+```
